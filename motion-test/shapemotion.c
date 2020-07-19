@@ -176,7 +176,7 @@ void main()
   layerInit(&layer0);
   layerDraw(&layer0);
 
-
+  
   layerGetBounds(&fieldLayer, &fieldFence);
   pacMan();
   buzzer_init();
@@ -211,66 +211,7 @@ void main()
     movLayerDraw(&ml0, &layer0);
   }
 
-  if(~SWITCHES & SW1){
-
-
-
-    for(int i = 1200;i<20000/2;i++){
-
-
-
-      for(int j = 800;j<2000/2; j++){
-
-
-
-	buzzer_set_period(i);
-
-
-
-      }
-
-
-
-    }
-
-
-
-  }
-
-
-
-  else if(~SWITCHES & SW2){
-
-
-
-    buzzer_set_period(100);
-
-
-    //led_changed = changed;
-
-
-
-    // led_update();
-
-
-
-  }
-
-  else if(~SWITCHES & SW3)
-
-
-
-    buzzer_set_period(150);
-
-
-
-
-
-  else if(~SWITCHES & SW4)
-
-
-
-    buzzer_set_period(650);
+ 
 }
 
 /** Watchdog timer interrupt handler. 15 interrupts/sec */
@@ -279,8 +220,38 @@ void wdt_c_handler()
   static short count = 0;
   P1OUT |= GREEN_LED;		      /**< Green LED on when cpu on */
   count ++;
-  if (count == 15) {
-    mlAdvance(&ml0, &fieldFence);
+  static short flag =0;
+  while (count == 15) {
+    u_int switches = p2sw_read();
+    mlAdvance(&ml0,&fieldFence);
+
+    if(~switches & SW1){
+
+      for(int i = 1200;i<20000/2;i++){
+	for(int j = 800;j<2000/2; j++){
+	  buzzer_set_period(i);
+
+	}
+      }
+    }
+
+    else if(~switches & SW2){
+      buzzer_set_period(100);
+      //led_changed = changed;
+
+      // led_update();
+
+    }
+
+    else if(~switches & SW3){
+      buzzer_set_period(150);
+    }
+
+    else if(~switches & SW4){
+      buzzer_set_period(650);
+    }
+    else
+      
     if (p2sw_read())
       redrawScreen = 1;
     count = 0;
