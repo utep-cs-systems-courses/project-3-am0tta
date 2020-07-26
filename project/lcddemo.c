@@ -1,23 +1,31 @@
 /** \file lcddemo.c
  *  \brief A simple demo that draws a string and square
  */
-
+#include <msp430.h>
 #include <libTimer.h>
 #include "lcdutils.h"
 #include "lcddraw.h"
+#include "p2switches.h"
 #include "buzzer.h"
 
+#define GREEN_LED BIT6
 void pacMan();
+
+int redrawScreen = 1;
+
 /** Initializes everything, clears the screen, draws "hello" and a square */
 int
 main()
 {
+  P1DIR |= GREEN_LED;                 /** Green led on when CPU on */
+  P1OUT |= GREEN_LED;
+
   
   configureClocks();
   lcd_init();
   u_char width = screenWidth, height = screenHeight;
 
-  clearScreen(COLOR_BLUE);
+  clearScreen(COLOR_NAVY);
 
   drawString11x16(10,10, "THE CAKE", COLOR_GREEN, COLOR_RED);
   drawString11x16(10,30, "IS A LIE!", COLOR_GREEN, COLOR_RED);
@@ -27,38 +35,36 @@ main()
   pacMan();
   buzzer_init();
   for(int i =1200 ;i<20000/2;i++){                //Plays a tune before the game starts
-
     for(int j =800 ; j<2000/2; j++){
-
       buzzer_set_period(i);
 
-
-
     }
-
-
-
   }
-
-
 
   buzzer_set_period(0);                       //stops the tune
 
-  
-  //fillRectangle(30,30, 60, 60, COLOR_ORANGE);
-  /*
-  int i;
-  for(int j =0; i <=60;){
-    int row = j;
-    for(int col =j;col<=screenWidth-j;col++)
-      drawPixel(row,col,COLOR_PINK);
-      }*/
-    /*
-  signed char c;
-  for(c = 0; c<10; c++){
-      for(signed char r = -c; r <c; r++)
-	drawPixel(c+20, r+20, COLOR_BLACK);
-	}*/
+
+  for(;;) {
+    while (!redrawScreen) { /**< Pause CPU if screen doesn't need updating */
+      P1OUT &= ~GREEN_LED;    /**< Green led off witHo CPU */
+      or_sr(0x10);      /**< CPU OFF */
+    }
+
+    P1OUT |= GREEN_LED;       /**< Green led on when CPU on */
+    redrawScreen = 0;
+
+  }
+  /** Watchdog timer interrupt handler. 15 interrupts/sec */
+  void wdt_c_handler(){
+
+    static short count = 0;
+    P1OUT |= GREEN_LED;      /**< Green LED on when cpu on */
+    count ++;
+    static short flag =0;
+    while (count == 15) {
+    }
+  }
+  P1OUT &= ~GREEN_LED;       /**< Green LED off when cpu off */
     
 }
 

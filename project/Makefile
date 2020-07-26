@@ -22,7 +22,7 @@ install: libLcd.a
 clean:
 	rm -f libLcd.a *.o *.elf
 
-lcddemo.elf: lcddemo.o libLcd.a buzzer.o 
+lcddemo.elf: lcddemo.o libLcd.a buzzer.o p2switches.o 
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@ -lTimer 
 
 load: lcddemo.elf
