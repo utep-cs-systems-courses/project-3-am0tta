@@ -5,6 +5,7 @@
 #include <libTimer.h>
 #include "lcdutils.h"
 #include "lcddraw.h"
+#include "buzzer.h"
 
 void pacMan();
 /** Initializes everything, clears the screen, draws "hello" and a square */
@@ -21,9 +22,27 @@ main()
   drawString11x16(10,10, "THE CAKE", COLOR_GREEN, COLOR_RED);
   drawString11x16(10,30, "IS A LIE!", COLOR_GREEN, COLOR_RED);
   //drawString11x16(40, 40, "howdy", COLOR_GREEN, COLOR_ORANGE);
+ 
 
   pacMan();
+  buzzer_init();
+  for(int i =1200 ;i<20000/2;i++){                //Plays a tune before the game starts
 
+    for(int j =800 ; j<2000/2; j++){
+
+      buzzer_set_period(i);
+
+
+
+    }
+
+
+
+  }
+
+
+
+  buzzer_set_period(0);                       //stops the tune
 
   
   //fillRectangle(30,30, 60, 60, COLOR_ORANGE);
