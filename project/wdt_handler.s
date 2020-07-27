@@ -1,4 +1,4 @@
-	.file	"wdt_handler.c"
+	.file	"_wdt_handler.c"
 	.text
 	.balign 2
 	.global	WDT
