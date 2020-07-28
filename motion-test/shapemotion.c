@@ -1,99 +1,93 @@
-/** \file shapemotion.c
- *  \brief This is a simple shape motion demo.
- *  This demo creates two layers containing shapes.
- *  One layer contains a rectangle and the other a circle.
- *  While the CPU is running the green LED is on, and
- *  when the screen does not need to be redrawn the CPU
- *  is turned off along with the green LED.
- */  
+
 #include <msp430.h>
 #include <libTimer.h>
 #include <lcdutils.h>
 #include <lcddraw.h>
 #include "p2switches.h"
 #include "buzzer.h"
-#include "led.h"
+//#include "led.h"
 
 #define GREEN_LED BIT6
 void pacMan();
+
 
 u_int bgColor = COLOR_BLUE;
 int redrawScreen = 1;
 
 void main()
 {
-  P1DIR |= GREEN_LED;		/**< Green led on when CPU on */		
-  P1OUT |= GREEN_LED;
 
+  P1DIR |= GREEN_LED;/**< Green led on when CPU on */
+  P1OUT |= GREEN_LED;
   configureClocks();
   lcd_init();
   //led_init();
   p2sw_init(15);
   clearScreen(COLOR_BLUE);
   (p2sw_read());
-
   buzzer_init();
+
   drawString11x16(10,10, "THE CAKE", COLOR_GREEN, COLOR_RED);
   drawString11x16(10, 30, "IS A LIE!", COLOR_GREEN, COLOR_RED);
-  
+
   enableWDTInterrupts();      /**< enable periodic interrupt */
-  or_sr(0x08);	              /**< GIE (enable interrupts) */
+  or_sr(0x08);              /**< GIE (enable interrupts) */
 
+  for(;;) {
 
-  for(;;) { 
     while (!redrawScreen) { /**< Pause CPU if screen doesn't need updating */
       P1OUT &= ~GREEN_LED;    /**< Green led off witHo CPU */
-      or_sr(0x10);	      /**< CPU OFF */
+      or_sr(0x10);      /**< CPU OFF */
     }
     P1OUT |= GREEN_LED;       /**< Green led on when CPU on */
     redrawScreen = 0;
-   
+
   }
 
 }
-
 /** Watchdog timer interrupt handler. 15 interrupts/sec */
 void wdt_c_handler()
 {
+
   static short count = 0;
-  P1OUT |= GREEN_LED;		      /**< Green LED on when cpu on */
+  P1OUT |= GREEN_LED;      /**< Green LED on when cpu on */
   count ++;
   static short flag =0;
   while (count == 15) {
     u_int switches = p2sw_read();
     if(~switches & SW1){
-
       for(int i = 1200;i<20000/2;i++){
 	for(int j = 800;j<2000/2; j++){
 	  buzzer_set_period(i);
 
 	}
-      }
-      buzzer_set_period(0);
-    }
 
+      }
+
+      buzzer_set_period(0);
+
+    }
     else if(~switches & SW2){
       pacMan();
-      
 
     }
-
-
     else if(~switches & SW3){
       buzzer_set_period(1000);
-    
-    }
 
+    }
     else if(~switches & SW4){
       buzzer_set_period(0);
+
     }
     else
-      
-    if (p2sw_read())
-      redrawScreen = 1;
+      if (p2sw_read())
+	redrawScreen = 1;
     count = 0;
-  } 
-  P1OUT &= ~GREEN_LED;		    /**< Green LED off when cpu off */
+
+  }
+
+  P1OUT &= ~GREEN_LED;    /**< Green LED off when cpu off */
+
 }
 void pacMan(){
   int i;
