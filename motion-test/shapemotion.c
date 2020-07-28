@@ -5,6 +5,7 @@
 #include <lcddraw.h>
 #include "p2switches.h"
 #include "buzzer.h"
+#include "stateMachines.h"
 //#include "led.h"
 
 #define GREEN_LED BIT6
@@ -31,7 +32,7 @@ void main()
   drawString11x16(10, 30, "IS A LIE!", COLOR_GREEN, COLOR_RED);
 
   enableWDTInterrupts();      /**< enable periodic interrupt */
-  or_sr(0x08);              /**< GIE (enable interrupts) */
+  or_sr(0x8);              /**< GIE (enable interrupts) */
 
   for(;;) {
 
@@ -48,12 +49,12 @@ void main()
 /** Watchdog timer interrupt handler. 15 interrupts/sec */
 void wdt_c_handler()
 {
-
+  u_int switches = p2sw_read();
   static short count = 0;
   P1OUT |= GREEN_LED;      /**< Green LED on when cpu on */
-  count ++;
+  count++;
   static short flag =0;
-  while (count == 15) {
+  while(count == 15){
     u_int switches = p2sw_read();
     if(~switches & SW1){
       for(int i = 1200;i<20000/2;i++){
