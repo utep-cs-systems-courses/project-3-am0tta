@@ -13,5 +13,9 @@
 unsigned int p2sw_read();
 void p2sw_init(unsigned char mask);
 
+extern char sw1_state_down,
+  sw2_state_down, sw3_state_down, sw4_state_down, state; /*effectively boolean */
+
+extern int redrawScreen;
 
 #endif // included

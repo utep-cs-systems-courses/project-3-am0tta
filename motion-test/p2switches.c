@@ -1,10 +1,14 @@
 #include <msp430.h>
 #include "p2switches.h"
+#include "stateMachines.h"
 
 
 static unsigned char switch_mask;
 static unsigned char switches_last_reported;
 static unsigned char switches_current;
+
+char sw1_state_down, sw2_state_down, sw3_state_down, sw4_state_down;
+char state = 0;
 
 
 static void switch_update_interrupt_sense()
@@ -56,6 +60,31 @@ __interrupt_vec(PORT2_VECTOR) Port_2(){
     P2IFG &= ~switch_mask;/* clear pending sw interrupts */
     switch_update_interrupt_sense();
 
+  }
+
+}
+
+void switch_interrupt_handler(){
+
+  unsigned int switches = p2sw_read();
+  sw1_state_down = (~switches & SW1) ? 0 : 1; /* 0 when SW1 is up */
+  sw2_state_down = (~switches & SW2) ? 0 : 1; /* 0 when SW2 is up */
+  sw3_state_down = (~switches & SW3) ? 0 : 1; /* 0 when SW3 is up */
+  sw4_state_down = (~switches & SW4) ? 0 : 1; /* 0 when SW4 is up */
+
+  if (sw1_state_down){
+      state = 1;
+  }
+  if (sw2_state_down){
+      state = 2;
+  }
+
+  if (sw3_state_down){
+      state = 3;
+  }
+
+  if (sw4_state_down){
+      state = 4;
   }
 
 }

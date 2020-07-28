@@ -10,11 +10,13 @@ AS              = msp430-elf-gcc -mmcu=${CPU} -c
 all:shapemotion.elf
 
 #additional rules for files
-shapemotion.elf: ${COMMON_OBJECTS} shapemotion.o buzzer.o p2switches.o wdt_handler.o
+shapemotion.elf: ${COMMON_OBJECTS} shapemotion.o buzzer.o p2switches.o wdt_handler.o stateMachines.o
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ -lTimer -lLcd -lShape -lCircle -lp2sw
 
 load: shapemotion.elf
 	msp430loader.sh $^
+
+stateMachines.o: stateMachines.c stateMachines.h
 
 clean:
 	rm -f ~ *.o *.elf
