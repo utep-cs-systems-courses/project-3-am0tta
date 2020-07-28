@@ -11,8 +11,8 @@
 #include <lcdutils.h>
 #include <lcddraw.h>
 #include "p2switches.h"
-#include <shape.h>
 #include "buzzer.h"
+#include "led.h"
 
 #define GREEN_LED BIT6
 void pacMan();
@@ -27,27 +27,17 @@ void main()
 
   configureClocks();
   lcd_init();
-  shapeInit();
+  //led_init();
   p2sw_init(15);
   clearScreen(COLOR_BLUE);
   (p2sw_read());
 
-  shapeInit();
-  //pacMan();
   buzzer_init();
+  drawString11x16(10,10, "THE CAKE", COLOR_GREEN, COLOR_RED);
+  drawString11x16(10, 30, "IS A LIE!", COLOR_GREEN, COLOR_RED);
   
-  for(int i =1200 ;i<20000/2;i++){                //Plays a tune before the game starts
-    for(int j =800 ; j<2000/2; j++){
-      buzzer_set_period(i);
-
-    }
-
-  }
-  
-  buzzer_set_period(0);                       //stops the tune
-
   enableWDTInterrupts();      /**< enable periodic interrupt */
-  or_sr(0x8);	              /**< GIE (enable interrupts) */
+  or_sr(0x08);	              /**< GIE (enable interrupts) */
 
 
   for(;;) { 
@@ -84,19 +74,13 @@ void wdt_c_handler()
 
     else if(~switches & SW2){
       pacMan();
-      //led_changed = changed;
-      //led_update();
+      
 
     }
 
-    else if(SW2){
-    clearScreen(COLOR_BLUE);
-    }
+
     else if(~switches & SW3){
       buzzer_set_period(1000);
-      //if(switches & SW3){
-      //drawPixel(50,50, COLOR_GREEN);
-      //}
     
     }
 
