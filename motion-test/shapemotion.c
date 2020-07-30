@@ -33,7 +33,17 @@ void main()
 
   enableWDTInterrupts();      /**< enable periodic interrupt */
   or_sr(0x8);              /**< GIE (enable interrupts) */
-
+  
+  for (int i = 0; i< 1000; i++){
+    P1OUT = LED_RED;
+    __delay_cycles(10000);
+    P1OUT = LED_GREEN;
+    __delay_cycles(10000);
+    P1OUT = !LED_RED;
+    __delay_cycles(10000);
+    P1OUT = !LED_GREEN;
+    __delay_cycles(10000);
+    }
   for(;;) {
 
     while (!redrawScreen) { /**< Pause CPU if screen doesn't need updating */

@@ -1,5 +1,0 @@
-#include <msp430.h>
-#include "led.h"
-
-void
-__interrupt_vec_(WDT_VECTOR
