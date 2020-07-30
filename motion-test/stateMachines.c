@@ -6,6 +6,7 @@
 #include <shape.h>
 #include "buzzer.h"
 #include "stateMachines.h"
+#include "led.h"
 
 static char state = 0;
 void stateAdvance(){
@@ -19,6 +20,7 @@ void stateAdvance(){
       }
     }
     state = 1;
+    
     break;
   case 2:
     pacman();
@@ -38,8 +40,6 @@ void stateAdvance(){
 void pacman(){
 
     int i;
-
-
 
     drawPixel(50,50,COLOR_BLACK);
 

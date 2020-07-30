@@ -6,7 +6,7 @@
 #include "p2switches.h"
 #include "buzzer.h"
 #include "stateMachines.h"
-//#include "led.h"
+#include "led.h"
 
 #define GREEN_LED BIT6
 void pacMan();
@@ -22,7 +22,7 @@ void main()
   P1OUT |= GREEN_LED;
   configureClocks();
   lcd_init();
-  //led_init();
+  led_init();
   p2sw_init(15);
   clearScreen(COLOR_BLUE);
   (p2sw_read());
@@ -90,6 +90,19 @@ void wdt_c_handler()
   P1OUT &= ~GREEN_LED;    /**< Green LED off when cpu off */
 
 }
+/*
+void
+__interrupt_vec(WDT_VECTOR) WDT(){
+  static char blink_count = 0;
+  if(++blink_count ==125){
+    sm_slow_clock();
+    blink_count = 0;
+  }
+  sm_fast_clock();
+  sm_update_led();
+
+  led_update();
+  }*/
 void pacMan(){
   int i;
 

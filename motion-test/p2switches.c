@@ -37,13 +37,9 @@ void p2sw_init(unsigned char mask)
 }
 
 /* Returns a word where:
-
  * the high-order byte is the buttons that have changed,
-
  * the low-order byte is the current state of the buttons
-
  */
-
 unsigned int p2sw_read() {
 
   unsigned int sw_changed = switches_current ^ switches_last_reported;
@@ -52,17 +48,7 @@ unsigned int p2sw_read() {
 
 }
 
-/* Switch on P2 (S1) */
 
-void
-__interrupt_vec(PORT2_VECTOR) Port_2(){
-  if (P2IFG & switch_mask) {  /* did a button cause this interrupt? */
-    P2IFG &= ~switch_mask;/* clear pending sw interrupts */
-    switch_update_interrupt_sense();
-
-  }
-
-}
 
 void switch_interrupt_handler(){
 
@@ -85,6 +71,18 @@ void switch_interrupt_handler(){
 
   if (sw4_state_down){
       state = 4;
+  }
+
+}
+
+/* Switch on P2 (S1) */
+void
+__interrupt_vec(PORT2_VECTOR) Port_2(){
+  if (P2IFG & switch_mask) {  /* did a button cause this interrupt? */
+    P2IFG &= ~switch_mask;/* clear pending sw interrupts */
+    switch_update_interrupt_sense();
+    switch_interrupt_handler();/* single handler for all switches */
+
   }
 
 }
