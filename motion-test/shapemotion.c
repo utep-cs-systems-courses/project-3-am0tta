@@ -51,8 +51,9 @@ void main()
       or_sr(0x10);      /**< CPU OFF */
     }
     P1OUT |= GREEN_LED;       /**< Green led on when CPU on */
-    redrawScreen = 0;
-
+ 
+    __delay_cycles(250000);       
+    redrawScreen = 0;        // Turn CPU OFF whenever there is no need to redraw
   }
 
 }
@@ -100,19 +101,7 @@ void wdt_c_handler()
   P1OUT &= ~GREEN_LED;    /**< Green LED off when cpu off */
 
 }
-/*
-void
-__interrupt_vec(WDT_VECTOR) WDT(){
-  static char blink_count = 0;
-  if(++blink_count ==125){
-    sm_slow_clock();
-    blink_count = 0;
-  }
-  sm_fast_clock();
-  sm_update_led();
 
-  led_update();
-  }*/
 void pacMan(){
   int i;
 
