@@ -6,6 +6,7 @@
 #include <shape.h>
 #include "buzzer.h"
 #include "stateMachines.h"
+#include "stateAssembly.h"
 #include "led.h"
 
 static char state = 0;

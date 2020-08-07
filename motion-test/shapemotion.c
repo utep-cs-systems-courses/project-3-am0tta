@@ -61,16 +61,18 @@ void main()
 /** Watchdog timer interrupt handler. 15 interrupts/sec */
 void wdt_c_handler()
 {
-  u_int switches = p2sw_read();
   static short count = 0;
   P1OUT |= GREEN_LED;      /**< Green LED on when cpu on */
   count++;
-  static short flag =0;
-  while(count == 15){
+  //static short flag =0;
+  if(count == 15){
 
     advance_assembly_lang();
     u_int switches = p2sw_read();
+    count = 0;
+    
     if(~switches & SW1){
+      
       for(int i = 1200;i<20000/2;i++){
 	for(int j = 800;j<2000/2; j++){
 	  buzzer_set_period(i);
@@ -92,18 +94,18 @@ void wdt_c_handler()
     }
     else if(~switches & SW4){
       buzzer_set_period(0);
-
     }
-    else
-      if (p2sw_read())
-	redrawScreen = 1;
-    count = 0;
-
+     else
+       if (p2sw_read())
+	 redrawScreen = 1;
+       count = 0;
   }
-
-  P1OUT &= ~GREEN_LED;    /**< Green LED off when cpu off */
-
+  P1OUT &= ~GREEN_LED;
 }
+  
+
+//P1OUT &= ~GREEN_LED;    /**< Green LED off when cpu off */
+
 
 void pacMan(){
   int i;
