@@ -6,6 +6,7 @@
 #include "p2switches.h"
 #include "buzzer.h"
 #include "stateMachines.h"
+#include "stateAssembly.h"
 #include "led.h"
 
 #define GREEN_LED BIT6
@@ -66,6 +67,8 @@ void wdt_c_handler()
   count++;
   static short flag =0;
   while(count == 15){
+
+    advance_assembly_lang();
     u_int switches = p2sw_read();
     if(~switches & SW1){
       for(int i = 1200;i<20000/2;i++){
