@@ -9,7 +9,7 @@
 #include "led.h"
 
 static char state = 0;
-void stateAdvance(){
+void stateAdvance(char state){
   
   switch(state){
   case 1:

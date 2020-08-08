@@ -29,6 +29,8 @@ void main()
   (p2sw_read());
   buzzer_init();
 
+  fillRectangle(30,30,80,40, COLOR_VIOLET);
+    
   drawString11x16(10,10, "THE CAKE", COLOR_GREEN, COLOR_RED);
   drawString11x16(10, 30, "IS A LIE!", COLOR_GREEN, COLOR_RED);
 
@@ -68,9 +70,10 @@ void wdt_c_handler()
   static short flag =0;
   while(count == 15){
 
-    //advance_assembly_lang();
+    advance_assembly_lang();
     //drawFigure();
     u_int switches = p2sw_read();
+    
     if(~switches & SW1){
       for(int i = 1200;i<20000/2;i++){
 	for(int j = 800;j<2000/2; j++){
@@ -102,7 +105,7 @@ void wdt_c_handler()
 
   }
 
-  P1OUT &= ~GREEN_LED;    /**< Green LED off when cpu off */
+  P1OUT &= ~GREEN_LED;    /**< Green LED off when cpu off **/ 
 
 }
 

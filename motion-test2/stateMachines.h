@@ -1,6 +1,6 @@
 #ifndef stateMachines_included
 #define stateMachines_included
 
-void stateAdvance();
+void stateAdvance(char state);
 void pacman();
 #endif // included
