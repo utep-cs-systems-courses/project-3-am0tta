@@ -69,6 +69,7 @@ void wdt_c_handler()
   while(count == 15){
 
     //advance_assembly_lang();
+    //drawFigure();
     u_int switches = p2sw_read();
     if(~switches & SW1){
       for(int i = 1200;i<20000/2;i++){
