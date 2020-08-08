@@ -10,7 +10,7 @@ sounds, and more
 
 To compile the program type **make all** and to run it simply type make loa.
 
-1. Switch 1 plays a tone that goes from certain frequency a=to another frequency
+1. Switch 1 plays a tone that goes from certain frequency to another frequency
 2. Switch 2 displays a pacman
 3. Switch 3 play a tone
 4. Switch 4 mutes tones
